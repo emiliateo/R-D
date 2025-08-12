@@ -41,7 +41,7 @@ jobs:
                   'messages': [
                       {
                           'role': 'user',
-                          'content': 'In this log file, do you find some log anomalies? Please analyze the following log content and identify any unusual patterns, errors, or anomalies:\\n\\n' + cleaned_content
+                          'content': 'You are a log analysis expert. Analyze this application log file and provide a comprehensive report. Please identify and categorize any anomalies, security incidents, performance issues, and operational problems. Structure your response with clear sections for: 1) Executive Summary, 2) Security Incidents, 3) System Performance Issues, 4) Operational Problems, 5) Log Format Anomalies, 6) Recommendations. Here is the log content:\\n\\n' + cleaned_content
                       }
                   ],
                   'model': 'openai/gpt-4o'
@@ -64,7 +64,77 @@ jobs:
              -H "Authorization: Bearer $GITHUB_TOKEN" \
              -d @/tmp/final_request.json)
           
-          echo "=== LOG ANOMALY ANALYSIS RESULTS ==="
+          echo "=== 📊 COMPREHENSIVE LOG ANALYSIS REPORT ==="
+          echo "Generated on: $(date)"
+          echo "Log file: logs/app.log"
+          echo "Analysis powered by: GitHub Models (GPT-4o)"
+          echo "=================================="
+          echo ""
+          echo "$RESPONSE" | python3 -c "
+          import sys, json
+          try:
+              data = json.load(sys.stdin)
+              if 'choices' in data and len(data['choices']) > 0:
+                  analysis_result = data['choices'][0]['message']['content']
+                  print(analysis_result)
+                  print('')
+                  print('=== 📈 ANALYSIS METADATA ===')
+                  print(f'Model used: {data.get(\"model\", \"N/A\")}')
+                  if 'usage' in data:
+                      print(f'Tokens processed: {data[\"usage\"].get(\"total_tokens\", \"N/A\")}')
+                  print('Analysis completed successfully!')
+              else:
+                  print('❌ Error: Unexpected response format')
+                  print('Raw API response:')
+                  print(json.dumps(data, indent=2))
+          except json.JSONDecodeError as e:
+              print('❌ Error parsing JSON response:', str(e))
+              print('Raw response:')
+              sys.stdin.seek(0)
+              print(sys.stdin.read())
+          except Exception as e:
+              print('❌ Error processing response:', str(e))
+              print('Raw response:')
+              try:
+                  sys.stdin.seek(0)
+                  print(sys.stdin.read())
+              except:
+                  print('Could not read raw response')
+          "
+          
+          echo ""
+          echo "=== 🔍 LOG FILE STATISTICS ==="
+          echo "Total lines: $(wc -l < logs/app.log)"
+          echo "File size: $(du -h logs/app.log | cut -f1)"
+          echo "Date range: $(head -1 logs/app.log | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' || echo 'N/A') to $(tail -1 logs/app.log | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}' || echo 'N/A')"
+          echo "Error count: $(grep -c '\[ERROR\]' logs/app.log || echo '0')"
+          echo "Warning count: $(grep -c '\[WARN\]' logs/app.log || echo '0')"
+          echo "Critical count: $(grep -c '\[CRITICAL\]' logs/app.log || echo '0')"
+          
+      - name: Create Analysis Summary
+        run: |
+          # Create a summary file with timestamp
+          SUMMARY_FILE="log-analysis-summary-$(date +%Y%m%d-%H%M%S).md"
+          
+          cat > "$SUMMARY_FILE" << 'EOF'
+          # 📊 Log Analysis Report
+          
+          **Generated:** $(date)  
+          **Repository:** ${{ github.repository }}  
+          **Workflow:** ${{ github.workflow }}  
+          **Run ID:** ${{ github.run_id }}  
+          
+          ## 📈 Log File Statistics
+          - **Total lines:** $(wc -l < logs/app.log)
+          - **File size:** $(du -h logs/app.log | cut -f1)  
+          - **Error entries:** $(grep -c '\[ERROR\]' logs/app.log || echo '0')
+          - **Warning entries:** $(grep -c '\[WARN\]' logs/app.log || echo '0')
+          - **Critical entries:** $(grep -c '\[CRITICAL\]' logs/app.log || echo '0')
+          
+          ## 🔍 Analysis Results
+          EOF
+          
+          # Add the AI analysis results to the summary
           echo "$RESPONSE" | python3 -c "
           import sys, json
           try:
@@ -72,10 +142,20 @@ jobs:
               if 'choices' in data and len(data['choices']) > 0:
                   print(data['choices'][0]['message']['content'])
               else:
-                  print('Error: Unexpected response format')
-                  print(json.dumps(data, indent=2))
+                  print('Error: Could not extract analysis results')
           except Exception as e:
-              print('Error processing response:', str(e))
-              sys.stdin.seek(0)
-              print('Raw response:', sys.stdin.read())
-          "
+              print('Error processing results:', str(e))
+          " >> "$SUMMARY_FILE"
+          
+          echo "" >> "$SUMMARY_FILE"
+          echo "---" >> "$SUMMARY_FILE"
+          echo "*Analysis powered by GitHub Models API*" >> "$SUMMARY_FILE"
+          
+          echo "📁 Summary saved to: $SUMMARY_FILE"
+          
+      - name: Upload Analysis Summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-analysis-report-${{ github.run_number }}
+          path: log-analysis-summary-*.md
+          retention-days: 30
