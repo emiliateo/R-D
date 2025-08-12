@@ -6,6 +6,7 @@
 2025-08-12 09:00:05 [INFO] HTTP server listening on port 8080
 2025-08-12 09:00:06 [INFO] Application ready to accept connections
 
+
 2025-08-12 09:15:23 [INFO] User login: john.doe@example.com
 2025-08-12 09:15:24 [DEBUG] Session created: sess_abc123def456
 2025-08-12 09:15:30 [INFO] GET /api/products?page=1&limit=20
