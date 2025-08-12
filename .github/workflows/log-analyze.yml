@@ -107,26 +107,24 @@ jobs:
           echo "$ANALYSIS_OUTPUT"
           
           # Create GitHub Job Summary
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          # 📊 Log Analysis Report
-          
-          **Generated:** $(date)  
-          **Repository:** ${{ github.repository }}  
-          **Log File:** `${{ env.LOG_FILE_PATH }}`  
-          **Analysis Model:** GitHub Models (GPT-4o)
-          
-          ## 📈 Log Statistics
-          - **Total lines:** $(wc -l < ${{ env.LOG_FILE_PATH }})
-          - **File size:** $(du -h ${{ env.LOG_FILE_PATH }} | cut -f1)
-          - **ERROR entries:** $(grep -c '\[ERROR\]' ${{ env.LOG_FILE_PATH }} || echo '0')
-          - **WARN entries:** $(grep -c '\[WARN\]' ${{ env.LOG_FILE_PATH }} || echo '0') 
-          - **CRITICAL entries:** $(grep -c '\[CRITICAL\]' ${{ env.LOG_FILE_PATH }} || echo '0')
-          - **INFO entries:** $(grep -c '\[INFO\]' ${{ env.LOG_FILE_PATH }} || echo '0')
-          - **DEBUG entries:** $(grep -c '\[DEBUG\]' ${{ env.LOG_FILE_PATH }} || echo '0')
-          
-          ## 🔍 AI Analysis Results
-          
-          EOF
+          echo "# 📊 Log Analysis Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Generated:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Log File:** \`${{ env.LOG_FILE_PATH }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Analysis Model:** GitHub Models (GPT-4o)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📈 Log Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total lines:** $(wc -l < ${{ env.LOG_FILE_PATH }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **File size:** $(du -h ${{ env.LOG_FILE_PATH }} | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **ERROR entries:** $(grep -c '\[ERROR\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **WARN entries:** $(grep -c '\[WARN\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **CRITICAL entries:** $(grep -c '\[CRITICAL\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **INFO entries:** $(grep -c '\[INFO\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **DEBUG entries:** $(grep -c '\[DEBUG\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 AI Analysis Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           
           # Add the analysis results to the job summary
           echo "$ANALYSIS_OUTPUT" >> $GITHUB_STEP_SUMMARY
