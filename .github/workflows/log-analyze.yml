@@ -33,12 +33,14 @@ jobs:
       - name: Analyze logs for anomalies
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANALYSIS_PROMPT: ${{ env.ANALYSIS_PROMPT }}
         run: |
           # Use Python to properly handle log content and create JSON request
           python3 -c "
           import json
           import string
           import sys
+          import os
           
           try:
               # Read the log content and handle any encoding issues
@@ -50,12 +52,15 @@ jobs:
               printable_chars = string.printable
               cleaned_content = ''.join(char if char in printable_chars else ' ' for char in log_content)
               
+              # Get the analysis prompt from environment variable
+              analysis_prompt = os.environ.get('ANALYSIS_PROMPT', 'Analyze this log file for anomalies.')
+              
               # Create the API request
               request_data = {
                   'messages': [
                       {
                           'role': 'user',
-                          'content': '${{ env.ANALYSIS_PROMPT }}\\n\\n' + cleaned_content
+                          'content': analysis_prompt + '\\n\\n' + cleaned_content
                       }
                   ],
                   'model': 'openai/gpt-4o'
