@@ -1,0 +1,225 @@
+2025-08-12 09:00:00 [INFO] Application server v2.1.4 starting up
+2025-08-12 09:00:01 [INFO] Loading configuration from /etc/app/config.yml
+2025-08-12 09:00:02 [INFO] Database connection established: postgresql://db-prod:5432/ecommerce
+2025-08-12 09:00:03 [INFO] Redis cache initialized: redis://cache:6379
+2025-08-12 09:00:04 [INFO] JWT secret loaded from environment
+2025-08-12 09:00:05 [INFO] HTTP server listening on port 8080
+2025-08-12 09:00:06 [INFO] Application ready to accept connections
+
+2025-08-12 09:15:23 [INFO] User login: john.doe@example.com
+2025-08-12 09:15:24 [DEBUG] Session created: sess_abc123def456
+2025-08-12 09:15:30 [INFO] GET /api/products?page=1&limit=20
+2025-08-12 09:15:31 [DEBUG] Database query executed in 0.045s
+2025-08-12 09:15:35 [WARN] Slow query detected: SELECT * FROM products WHERE category_id IN (...) - 2.8 seconds
+
+2025-08-12 09:22:45 [ERROR] Database connection timeout: Connection to db-prod:5432 timed out after 30s
+2025-08-12 09:22:46 [INFO] Attempting database reconnection (1/3)
+2025-08-12 09:22:47 [ERROR] Database reconnection failed: Connection refused
+2025-08-12 09:22:48 [INFO] Attempting database reconnection (2/3)
+2025-08-12 09:22:49 [INFO] Database connection restored successfully
+
+2025-08-12 09:28:12 [INFO] User login: admin@company.com
+2025-08-12 09:28:13 [WARN] Admin login from unusual location: IP 203.0.113.45 (Country: Unknown)
+2025-08-12 09:28:20 [INFO] Admin accessed user management panel
+
+2025-08-12 09:35:55 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:56 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:57 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:58 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:59 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:36:00 [WARN] IP address 198.51.100.78 blocked due to multiple failed login attempts
+
+2025-08-12 09:42:18 [INFO] Processing payment for order #ORD-2025-001234
+2025-08-12 09:42:19 [DEBUG] Payment gateway request: amount=$299.99, card=****1234
+2025-08-12 09:42:22 [ERROR] Payment gateway error: Card declined - insufficient funds
+2025-08-12 09:42:23 [INFO] Payment failure notification sent to user
+
+MALFORMED ENTRY: Something went wrong without proper formatting
+2025-08-12 09:45:30 [ERROR] NullPointerException in PaymentService.processPayment()
+java.lang.NullPointerException: Cannot invoke "String.trim()" because "cardNumber" is null
+    at com.app.service.PaymentService.processPayment(PaymentService.java:156)
+    at com.app.controller.OrderController.checkout(OrderController.java:89)
+
+2025-08-12 09:50:15 [WARN] Memory usage critical: 1.8GB / 2GB used (90%)
+2025-08-12 09:50:16 [INFO] Garbage collection triggered
+2025-08-12 09:50:18 [DEBUG] Garbage collection completed: 256MB freed
+
+2025-08-12 10:15:42 [ERROR] SQL injection attempt detected: ' OR 1=1 UNION SELECT * FROM users--
+2025-08-12 10:15:43 [ERROR] XSS attempt blocked: <script>alert('hack')</script>
+2025-08-12 10:15:44 [WARN] Suspicious activity from IP: 192.0.2.44 - Multiple attack vectors
+
+2025-08-12 10:30:01 [INFO] Daily backup process started
+2025-08-12 10:30:15 [ERROR] Backup failed: Disk full - cannot write to /backup/daily/
+2025-08-12 10:30:16 [CRITICAL] Backup system failure - manual intervention required
+
+2025-08-12 10:45:33 [WARN] API rate limit exceeded for user: api_user_12345 (1000 req/min)
+2025-08-12 10:45:34 [INFO] User temporarily throttled: api_user_12345
+
+2025-08-12 11:00:00 [INFO] Scheduled task: inventory_sync started
+2025-08-12 11:00:05 [ERROR] External API unreachable: https://supplier-api.example.com/v1/inventory
+2025-08-12 11:00:06 [WARN] Inventory sync failed - using cached data
+2025-08-12 11:00:07 [INFO] Scheduled task: inventory_sync completed with errors
+
+2025-08-12 11:20:45 [ERROR] OutOfMemoryError: Java heap space
+2025-08-12 11:20:46 [ERROR] Application crash detected - emergency shutdown initiated
+2025-08-12 11:20:47 [INFO] Emergency state saved to /tmp/emergency_dump.json
+
+Starting E-Commerce Application Server...
+2025-08-12 11:21:15 [INFO] Application server v2.1.4 restarting after crash
+2025-08-12 11:21:16 [WARN] Previous crash detected - loading emergency recovery mode
+2025-08-12 11:21:20 [INFO] Recovery completed - normal operations resumed
+
+2025-08-12 11:35:12 [INFO] High traffic detected: 500 concurrent users
+2025-08-12 11:35:13 [WARN] CPU usage high: 85%
+2025-08-12 11:35:14 [INFO] Auto-scaling triggered: Adding 2 new instances
+2025-08-12 11:35:25 [INFO] New instance online: app-server-03
+2025-08-12 11:35:26 [INFO] New instance online: app-server-04
+2025-08-12 11:35:27 [INFO] Load balancer configuration updated
+
+Strange log entry with emoji: 🚨 CRITICAL ALERT 🚨
+2025-08-12 12:00:00 [ERROR] Certificate expiration warning: SSL cert expires in 7 days
+2025-08-12 12:00:01 [WARN] Renewal process should be initiated immediately
+
+2025-08-12 12:15:30 [INFO] User logout: john.doe@example.com
+2025-08-12 12:15:31 [DEBUG] Session destroyed: sess_abc123def456
+2025-08-12 12:15:35 [INFO] Cache cleanup completed
+
+ERROR: Unhandled exception occurred
+2025-08-12 12:30:45 [ERROR] Unexpected error in order processing pipeline
+2025-08-12 12:30:46 [INFO] Circuit breaker activated for payment service
+2025-08-12 12:30:50 [INFO] Fallback payment provider activated
+
+2025-08-12 12:45:00 [WARN] Disk space warning: /var/log partition 85% full
+2025-08-12 12:45:01 [INFO] Log rotation initiated
+2025-08-12 12:45:02 [DEBUG] Old log files archived and compressed
+
+2025-08-12 13:00:00 [INFO] Health check: All systems operational
+2025-08-12 13:00:01 [DEBUG] Database connections: 25/100 active
+2025-08-12 13:00:02 [DEBUG] Cache hit ratio: 89.5%
+2025-08-12 13:00:03 [DEBUG] Average response time: 145ms
+
+2025-08-12 13:15:20 [INFO] User login: sarah.johnson@example.com
+2025-08-12 13:15:25 [WARN] Password expires in 2 days for user: sarah.johnson@example.com
+2025-08-12 13:15:30 [INFO] POST /api/orders - Creating new order
+2025-08-12 13:15:35 [DEBUG] Inventory check: product_id=12345, available=50, requested=2
+2025-08-12 13:15:40 [INFO] Order created successfully: #ORD-2025-001235
+
+2025-08-12 13:30:45 [ERROR] Redis connection lost: Connection reset by peer
+2025-08-12 13:30:46 [WARN] Falling back to database for session storage
+2025-08-12 13:30:50 [INFO] Redis connection restored
+2025-08-12 13:30:51 [INFO] Session storage switched back to Redis
+
+2025-08-12 13:45:10 [INFO] Batch job started: process_returns
+2025-08-12 13:45:15 [DEBUG] Processing 1,245 return requests
+2025-08-12 13:46:30 [WARN] Large batch processing detected - may impact performance
+2025-08-12 13:48:45 [ERROR] Batch processing timeout: Operation exceeded 3 minute limit
+2025-08-12 13:48:46 [INFO] Batch job failed - items queued for retry
+
+2025-08-12 14:00:00 [INFO] User login: mike.wilson@example.com
+2025-08-12 14:00:01 [DEBUG] Multi-factor authentication required
+2025-08-12 14:00:10 [INFO] MFA code sent via SMS
+2025-08-12 14:00:25 [WARN] Invalid MFA code attempt (1/3)
+2025-08-12 14:00:35 [WARN] Invalid MFA code attempt (2/3)
+2025-08-12 14:00:45 [INFO] MFA authentication successful
+
+2025-08-12 14:15:30 [ERROR] Third-party payment processor down: stripe.com unreachable
+2025-08-12 14:15:31 [INFO] Switching to backup payment processor: PayPal
+2025-08-12 14:15:35 [WARN] Payment processing may be slower due to failover
+
+2025-08-12 14:30:15 [CRITICAL] Database master node failure detected
+2025-08-12 14:30:16 [INFO] Initiating failover to replica node
+2025-08-12 14:30:20 [ERROR] Replica node sync lag: 45 seconds behind master
+2025-08-12 14:30:25 [WARN] Some recent transactions may be lost
+2025-08-12 14:30:30 [INFO] Failover completed - replica promoted to master
+
+[CORRUPTED LOG ENTRY] ��������� ERROR ���������
+2025-08-12 14:45:00 [ERROR] File system corruption detected on /data partition
+2025-08-12 14:45:01 [CRITICAL] Data integrity check failed
+2025-08-12 14:45:02 [INFO] Emergency read-only mode activated
+
+2025-08-12 15:00:10 [WARN] Unusual traffic pattern: 10x normal load from single IP block
+2025-08-12 15:00:15 [ERROR] DDoS attack suspected from 203.0.113.0/24 subnet
+2025-08-12 15:00:20 [INFO] DDoS protection activated - rate limiting enforced
+2025-08-12 15:00:25 [INFO] Traffic normalized after mitigation
+
+2025-08-12 15:15:40 [INFO] User login: alice.brown@example.com
+2025-08-12 15:15:45 [DEBUG] Shopping cart loaded: 12 items, total: $1,299.87
+2025-08-12 15:16:00 [INFO] Applying discount code: SUMMER2025
+2025-08-12 15:16:01 [ERROR] Discount code validation failed: Code expired
+2025-08-12 15:16:10 [INFO] User applied valid code: WELCOME10 (10% off)
+
+2025-08-12 15:30:25 [WARN] Email service degraded: SendGrid API responding slowly
+2025-08-12 15:30:30 [ERROR] Email send timeout: Order confirmation #ORD-2025-001236
+2025-08-12 15:30:35 [INFO] Email queued for retry in 5 minutes
+
+2025-08-12 15:45:00 [INFO] Scheduled maintenance window starting
+2025-08-12 15:45:05 [INFO] Database migration: adding_user_preferences_table
+2025-08-12 15:46:20 [DEBUG] Migration completed: 125,000 users migrated
+2025-08-12 15:46:25 [INFO] Scheduled maintenance completed
+
+2025-08-12 16:00:15 [ERROR] Memory leak detected in image processing service
+2025-08-12 16:00:16 [WARN] Memory usage climbing: 2.5GB / 4GB used
+2025-08-12 16:00:20 [INFO] Restarting image processing service
+2025-08-12 16:00:25 [INFO] Image processing service restarted successfully
+
+RANDOM_NOISE_IN_LOG_FILE_12345_ABCDEF_!@#$%^&*()
+2025-08-12 16:15:30 [INFO] CDN cache invalidation started
+2025-08-12 16:15:35 [DEBUG] Purging 15,000 cached objects
+2025-08-12 16:16:45 [INFO] CDN cache invalidation completed
+
+2025-08-12 16:30:00 [WARN] API client exceeding burst limit: mobile_app_v2.1
+2025-08-12 16:30:05 [INFO] Temporarily increasing limits for mobile app
+2025-08-12 16:30:10 [DEBUG] New limits: 2000 req/min (was 1000 req/min)
+
+2025-08-12 16:45:20 [ERROR] Search index corruption detected
+2025-08-12 16:45:21 [INFO] Rebuilding search index from database
+2025-08-12 16:47:30 [WARN] Search functionality temporarily unavailable
+2025-08-12 16:50:15 [INFO] Search index rebuild completed
+
+2025-08-12 17:00:00 [INFO] Peak hour traffic detected: 1,200 concurrent users
+2025-08-12 17:00:05 [WARN] Response time degradation: avg 450ms (threshold: 200ms)
+2025-08-12 17:00:10 [INFO] Auto-scaling: Adding 3 more instances
+2025-08-12 17:01:30 [INFO] Performance restored: avg response time 180ms
+
+2025-08-12 17:15:45 [ERROR] User session hijacking attempt detected
+2025-08-12 17:15:46 [WARN] Suspicious session activity: sess_xyz789abc123
+2025-08-12 17:15:47 [INFO] Session forcibly terminated for security
+
+2025-08-12 17:30:20 [INFO] Data export job started: monthly_analytics
+2025-08-12 17:30:25 [DEBUG] Analyzing 2.5M transactions
+2025-08-12 17:32:40 [WARN] Export file size exceeds 500MB limit
+2025-08-12 17:32:45 [INFO] Splitting export into 3 separate files
+2025-08-12 17:35:30 [INFO] Data export completed successfully
+
+2025-08-12 17:45:00 [ERROR] Webhook delivery failure: customer.payment.failed
+2025-08-12 17:45:01 [INFO] Webhook retry scheduled (1/5 attempts)
+2025-08-12 17:45:05 [ERROR] Webhook retry failed: HTTP 500 Internal Server Error
+2025-08-12 17:45:10 [ERROR] Webhook retry failed: HTTP 500 Internal Server Error
+2025-08-12 17:45:20 [WARN] Webhook marked as failed after 3 attempts
+
+Log entry with special chars: àáâãäåæçèéêë ñöø ÷ÿ
+2025-08-12 18:00:10 [INFO] System metrics: CPU 23%, Memory 45%, Disk I/O 12%
+2025-08-12 18:00:15 [DEBUG] Active user sessions: 856
+2025-08-12 18:00:20 [DEBUG] Database query pool: 45/100 connections used
+
+2025-08-12 18:15:30 [WARN] Unusual user behavior: 150 page views in 30 seconds
+2025-08-12 18:15:31 [ERROR] Potential bot activity from user: bot_hunter_2025
+2025-08-12 18:15:32 [INFO] User account flagged for review
+2025-08-12 18:15:35 [INFO] CAPTCHA challenge activated for suspicious sessions
+
+2025-08-12 18:30:00 [INFO] Evening backup process initiated
+2025-08-12 18:30:05 [DEBUG] Backup destination: s3://prod-backups/daily/2025-08-12/
+2025-08-12 18:32:20 [WARN] Backup progress slow: 15% complete after 2 minutes
+2025-08-12 18:35:45 [INFO] Backup completed successfully: 2.8GB archived
+2025-08-12 18:35:50 [DEBUG] Backup verification passed
+
+2025-08-12 18:45:15 [ERROR] SSL handshake failure with client 192.168.1.100
+2025-08-12 18:45:16 [WARN] Outdated client SSL version: TLS 1.0
+2025-08-12 18:45:17 [INFO] Client connection rejected - upgrade required
+
+2025-08-12 19:00:00 [INFO] Application server graceful shutdown initiated
+2025-08-12 19:00:01 [INFO] Waiting for active connections to complete...
+2025-08-12 19:00:05 [DEBUG] 23 connections still active
+2025-08-12 19:00:15 [DEBUG] 5 connections still active
+2025-08-12 19:00:25 [INFO] All connections closed gracefully
+2025-08-12 19:00:30 [INFO] Application server shutdown completed
