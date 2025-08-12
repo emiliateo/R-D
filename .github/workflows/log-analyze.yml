@@ -12,27 +12,19 @@ permissions:
 env:
   LOG_FILE_PATH: "logs/nginx.log"  # Change this path if your log file is in a different location
   ANALYSIS_PROMPT: |
-    You are an expert log forensics analyst specializing in error detection and anomaly identification. 
-    Focus specifically on analyzing ERROR logs, CRITICAL events, and unusual/strange log patterns that may indicate system problems, security threats, or operational failures.
+    You are a log analyst. Analyze these logs and provide a SHORT, CLEAR report focusing on errors and problems.
     
-    Pay special attention to:
-    - Error patterns and their frequency/clustering
-    - Unusual log formats or corrupted entries
-    - Security-related anomalies (failed authentications, suspicious IPs, injection attempts)
-    - System failures and crashes
-    - Performance degradation indicators
-    - Unexpected application behaviors
-    - Log entries that deviate from normal patterns
+    Keep your response CONCISE and use simple language. Focus only on:
+    - Critical errors and failures
+    - Security threats (attacks, suspicious activity)
+    - System problems that need fixing
     
-    Structure your response with these focused sections:
-    1) Error Summary & Severity Assessment
-    2) Critical Security Anomalies  
-    3) System Failure Patterns
-    4) Strange/Unusual Log Entries
-    5) Error Clustering & Timing Analysis
-    6) Immediate Action Required
+    Format your response in 3 SHORT sections:
+    1) **🚨 CRITICAL ISSUES** (most important problems - max 3 bullet points)
+    2) **⚠️ ERRORS FOUND** (list main error types - max 5 bullet points)  
+    3) **🔧 QUICK FIXES** (what to do next - max 3 action items)
     
-    Prioritize the most severe and unusual findings first. Here is the log content to analyze:
+    Use bullet points and keep each point to 1-2 sentences. Skip technical jargon. Here are the logs:
 
 jobs:
   analyze-logs:

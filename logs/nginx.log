@@ -112,3 +112,35 @@
 192.168.1.117 - - [12/Aug/2025:09:55:45 +0000] "GET /logout HTTP/1.1" 302 0 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
 2025/08/12 09:58:45 [crit] 1237#0: *1501 SSL_write() failed (32: Broken pipe) while sending to client, client: 192.168.1.201, server: example.com, request: "GET /secure/data HTTP/1.1", host: "example.com"
+
+2025-08-12 09:00:00 [INFO] Application server v2.1.4 starting up
+2025-08-12 09:00:01 [INFO] Loading configuration from /etc/app/config.yml
+2025-08-12 09:00:02 [INFO] Database connection established: postgresql://db-prod:5432/ecommerce
+2025-08-12 09:00:03 [INFO] Redis cache initialized: redis://cache:6379
+2025-08-12 09:00:04 [INFO] JWT secret loaded from environment
+2025-08-12 09:00:05 [INFO] HTTP server listening on port 8080
+2025-08-12 09:00:06 [INFO] Application ready to accept connections
+
+
+2025-08-12 09:15:23 [INFO] User login: john.doe@example.com
+2025-08-12 09:15:24 [DEBUG] Session created: sess_abc123def456
+2025-08-12 09:15:30 [INFO] GET /api/products?page=1&limit=20
+2025-08-12 09:15:31 [DEBUG] Database query executed in 0.045s
+2025-08-12 09:15:35 [WARN] Slow query detected: SELECT * FROM products WHERE category_id IN (...) - 2.8 seconds
+
+2025-08-12 09:22:45 [ERROR] Database connection timeout: Connection to db-prod:5432 timed out after 30s
+2025-08-12 09:22:46 [INFO] Attempting database reconnection (1/3)
+2025-08-12 09:22:47 [ERROR] Database reconnection failed: Connection refused
+2025-08-12 09:22:48 [INFO] Attempting database reconnection (2/3)
+2025-08-12 09:22:49 [INFO] Database connection restored successfully
+
+2025-08-12 09:28:12 [INFO] User login: admin@company.com
+2025-08-12 09:28:13 [WARN] Admin login from unusual location: IP 203.0.113.45 (Country: Unknown)
+2025-08-12 09:28:20 [INFO] Admin accessed user management panel
+
+2025-08-12 09:35:55 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:56 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:57 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:58 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:35:59 [ERROR] Unauthorized login attempt: wrong_user@malicious.com
+2025-08-12 09:36:00 [WARN] IP address 198.51.100.78 blocked due to multiple failed login attempts
