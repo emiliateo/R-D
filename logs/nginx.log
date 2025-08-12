@@ -1,0 +1,114 @@
+# NGINX ACCESS LOG ENTRIES
+192.168.1.100 - - [12/Aug/2025:08:30:15 +0000] "GET / HTTP/1.1" 200 2326 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+192.168.1.101 - - [12/Aug/2025:08:30:22 +0000] "GET /api/users HTTP/1.1" 200 1543 "https://example.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+10.0.0.15 - - [12/Aug/2025:08:31:05 +0000] "POST /api/login HTTP/1.1" 200 456 "https://example.com/login" "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X)"
+203.0.113.45 - - [12/Aug/2025:08:31:12 +0000] "GET /admin HTTP/1.1" 401 178 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+203.0.113.45 - - [12/Aug/2025:08:31:15 +0000] "GET /admin HTTP/1.1" 401 178 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+203.0.113.45 - - [12/Aug/2025:08:31:18 +0000] "GET /admin HTTP/1.1" 401 178 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+203.0.113.45 - - [12/Aug/2025:08:31:21 +0000] "POST /admin/login HTTP/1.1" 401 178 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+203.0.113.45 - - [12/Aug/2025:08:31:24 +0000] "POST /admin/login HTTP/1.1" 401 178 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+
+192.168.1.102 - - [12/Aug/2025:08:32:30 +0000] "GET /products?page=1 HTTP/1.1" 200 5432 "https://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.102 - - [12/Aug/2025:08:32:35 +0000] "GET /api/products/search?q=laptop HTTP/1.1" 200 8765 "https://example.com/products" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.103 - - [12/Aug/2025:08:33:10 +0000] "POST /api/orders HTTP/1.1" 201 234 "https://example.com/checkout" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+
+198.51.100.78 - - [12/Aug/2025:08:35:45 +0000] "GET /wp-admin/admin-ajax.php HTTP/1.1" 404 162 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0)"
+198.51.100.78 - - [12/Aug/2025:08:35:46 +0000] "GET /phpmyadmin/index.php HTTP/1.1" 404 162 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0)"
+198.51.100.78 - - [12/Aug/2025:08:35:47 +0000] "GET /.env HTTP/1.1" 404 162 "-" "curl/7.68.0"
+198.51.100.78 - - [12/Aug/2025:08:35:48 +0000] "GET /config/database.yml HTTP/1.1" 404 162 "-" "curl/7.68.0"
+
+# NGINX ERROR LOG ENTRIES
+2025/08/12 08:30:15 [error] 1234#0: *567 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.1.100, server: example.com, request: "GET /api/data HTTP/1.1", upstream: "http://192.168.10.5:3000/api/data", host: "example.com"
+
+2025/08/12 08:35:45 [error] 1234#0: *789 open() "/var/www/html/wp-admin/admin-ajax.php" failed (2: No such file or directory), client: 198.51.100.78, server: example.com, request: "GET /wp-admin/admin-ajax.php HTTP/1.1", host: "example.com"
+
+2025/08/12 08:35:47 [error] 1234#0: *790 access forbidden by rule, client: 198.51.100.78, server: example.com, request: "GET /.env HTTP/1.1", host: "example.com"
+
+192.168.1.104 - - [12/Aug/2025:08:40:12 +0000] "GET /api/data HTTP/1.1" 500 2431 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.104 - - [12/Aug/2025:08:40:15 +0000] "GET /api/data HTTP/1.1" 500 2431 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+2025/08/12 08:40:12 [error] 1234#0: *891 upstream timed out (110: Connection timed out) while connecting to upstream, client: 192.168.1.104, server: example.com, request: "GET /api/data HTTP/1.1", upstream: "http://192.168.10.5:3000/api/data", host: "example.com"
+
+192.168.1.105 - - [12/Aug/2025:08:42:30 +0000] "GET /large-file.zip HTTP/1.1" 206 104857600 "-" "wget/1.20.3 (linux-gnu)"
+
+203.0.113.89 - - [12/Aug/2025:08:45:10 +0000] "GET /api/users/1 UNION SELECT * FROM passwords-- HTTP/1.1" 400 89 "-" "python-requests/2.25.1"
+203.0.113.89 - - [12/Aug/2025:08:45:11 +0000] "POST /search HTTP/1.1" 200 1234 "https://example.com/" "Mozilla/5.0" "q=<script>alert('XSS')</script>"
+203.0.113.89 - - [12/Aug/2025:08:45:12 +0000] "GET /../../../etc/passwd HTTP/1.1" 400 89 "-" "curl/7.68.0"
+
+2025/08/12 08:45:10 [error] 1234#0: *992 ModSecurity: Warning. detected SQLi using libinjection with fingerprint 's&1' [file "/etc/modsecurity/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf"] [line "1230"] [id "942100"], client: 203.0.113.89, server: example.com, request: "GET /api/users/1 UNION SELECT * FROM passwords-- HTTP/1.1", host: "example.com"
+
+2025/08/12 08:45:11 [error] 1234#0: *993 ModSecurity: Warning. XSS Attack Detected via libinjection [file "/etc/modsecurity/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "56"] [id "941100"], client: 203.0.113.89, server: example.com, request: "POST /search HTTP/1.1", host: "example.com"
+
+2025/08/12 08:45:12 [error] 1234#0: *994 directory index of "/var/www/html/" is forbidden, client: 203.0.113.89, server: example.com, request: "GET /../../../etc/passwd HTTP/1.1", host: "example.com"
+
+192.168.1.106 - - [12/Aug/2025:08:50:00 +0000] "GET /api/users HTTP/1.1" 200 15432 "https://example.com/users" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" rt=5.234
+
+2025/08/12 08:50:00 [warn] 1234#0: *1001 upstream server temporarily disabled while connecting to upstream, client: 192.168.1.106, server: example.com, request: "GET /api/users HTTP/1.1", upstream: "http://192.168.10.5:3000/api/users", host: "example.com"
+
+192.168.1.107 - - [12/Aug/2025:08:50:15 +0000] "GET /api/reports HTTP/1.1" 200 45678 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" rt=8.567
+
+2025/08/12 08:50:15 [error] 1234#0: *1002 upstream prematurely closed connection while reading response header from upstream, client: 192.168.1.107, server: example.com, request: "GET /api/reports HTTP/1.1", upstream: "http://192.168.10.6:3000/api/reports", host: "example.com"
+
+192.168.1.108 - - [12/Aug/2025:08:52:30 +0000] "POST /api/upload HTTP/1.1" 413 145 "https://example.com/upload" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+
+2025/08/12 08:52:30 [error] 1234#0: *1003 client intended to send too large body: 52428800 bytes, client: 192.168.1.108, server: example.com, request: "POST /api/upload HTTP/1.1", host: "example.com"
+
+10.0.0.25 - - [12/Aug/2025:09:00:00 +0000] "GET /health HTTP/1.1" 200 23 "-" "kube-probe/1.21"
+
+2025/08/12 09:00:15 [warn] 1234#0: worker process 1235 exited on signal 11 (core dumped)
+
+2025/08/12 09:01:30 [notice] 1234#0: signal 1 (SIGHUP) received, reconfiguring
+
+10.0.0.25 - - [12/Aug/2025:09:01:00 +0000] "GET /health HTTP/1.1" 200 23 "-" "kube-probe/1.21"
+
+2025/08/12 09:01:31 [notice] 1234#0: reconfiguring
+2025/08/12 09:01:31 [notice] 1234#0: using the "epoll" event method
+2025/08/12 09:01:31 [notice] 1234#0: start worker processes
+2025/08/12 09:01:31 [notice] 1234#0: start worker process 1236
+2025/08/12 09:01:31 [notice] 1234#0: start worker process 1237
+
+192.168.1.109 - - [12/Aug/2025:09:05:12 +0000] "GET /static/css/main.css HTTP/1.1" 304 0 "https://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.109 - - [12/Aug/2025:09:05:13 +0000] "GET /static/js/app.js HTTP/1.1" 304 0 "https://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.109 - - [12/Aug/2025:09:05:15 +0000] "GET /api/config HTTP/1.1" 200 789 "https://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+66.249.66.1 - - [12/Aug/2025:09:10:45 +0000] "GET / HTTP/1.1" 200 2326 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+66.249.66.1 - - [12/Aug/2025:09:10:50 +0000] "GET /sitemap.xml HTTP/1.1" 200 1456 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+66.249.66.1 - - [12/Aug/2025:09:10:55 +0000] "GET /robots.txt HTTP/1.1" 200 234 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+
+192.168.1.110 - - [12/Aug/2025:09:15:30 +0000] "POST /api/payment HTTP/1.1" 200 567 "https://example.com/checkout" "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X)"
+192.168.1.111 - - [12/Aug/2025:09:16:45 +0000] "DELETE /api/users/123 HTTP/1.1" 204 0 "https://example.com/admin" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+
+157.55.39.1 - - [12/Aug/2025:09:20:12 +0000] "GET / HTTP/1.1" 200 2326 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"
+157.55.39.1 - - [12/Aug/2025:09:20:15 +0000] "GET /about HTTP/1.1" 200 3456 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"
+
+192.168.1.112 - - [12/Aug/2025:09:25:00 +0000] "GET /api/notifications HTTP/1.1" 200 1234 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.113 - - [12/Aug/2025:09:25:30 +0000] "PUT /api/profile HTTP/1.1" 200 345 "https://example.com/profile" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+
+203.0.113.123 - - [12/Aug/2025:09:30:00 +0000] "GET /api/users HTTP/1.1" 429 123 "https://example.com/" "python-requests/2.25.1"
+203.0.113.123 - - [12/Aug/2025:09:30:01 +0000] "GET /api/users HTTP/1.1" 429 123 "https://example.com/" "python-requests/2.25.1"
+203.0.113.123 - - [12/Aug/2025:09:30:02 +0000] "GET /api/users HTTP/1.1" 429 123 "https://example.com/" "python-requests/2.25.1"
+
+2025/08/12 09:30:00 [error] 1236#0: *1234 limiting requests, excess: 5.000 by zone "api", client: 203.0.113.123, server: example.com, request: "GET /api/users HTTP/1.1", host: "example.com"
+2025/08/12 09:30:01 [error] 1236#0: *1235 limiting requests, excess: 6.000 by zone "api", client: 203.0.113.123, server: example.com, request: "GET /api/users HTTP/1.1", host: "example.com"
+2025/08/12 09:30:02 [error] 1236#0: *1236 limiting requests, excess: 7.000 by zone "api", client: 203.0.113.123, server: example.com, request: "GET /api/users HTTP/1.1", host: "example.com"
+
+192.168.1.114 - - [12/Aug/2025:09:35:15 +0000] "GET /download/report.pdf HTTP/1.1" 200 15728640 "https://example.com/reports" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" rt=12.456
+
+2025/08/12 09:35:15 [warn] 1236#0: *1300 a client request body is buffered to a temporary file /var/cache/nginx/client_temp/0000000001, client: 192.168.1.114, server: example.com, request: "GET /download/report.pdf HTTP/1.1", host: "example.com"
+
+192.168.1.115 - - [12/Aug/2025:09:40:30 +0000] "POST /api/webhook HTTP/1.1" 200 78 "-" "GitHub-Hookshot/abc123"
+
+185.220.101.1 - - [12/Aug/2025:09:45:10 +0000] "GET /login HTTP/1.1" 200 4567 "-" "Tor Browser"
+185.220.101.1 - - [12/Aug/2025:09:45:12 +0000] "POST /login HTTP/1.1" 401 234 "https://example.com/login" "Tor Browser"
+185.220.101.1 - - [12/Aug/2025:09:45:15 +0000] "POST /login HTTP/1.1" 401 234 "https://example.com/login" "Tor Browser"
+
+2025/08/12 09:45:10 [warn] 1237#0: *1401 client closed connection while waiting for request, client: 185.220.101.1, server: example.com
+2025/08/12 09:45:12 [error] 1237#0: *1402 access forbidden by rule, client: 185.220.101.1, server: example.com, request: "POST /login HTTP/1.1", host: "example.com"
+
+192.168.1.116 - - [12/Aug/2025:09:50:00 +0000] "GET /api/stats HTTP/1.1" 200 8901 "https://example.com/analytics" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+
+2025/08/12 09:55:30 [error] 1237#0: *1500 SSL_do_handshake() failed (SSL: error:14094412:SSL routines:ssl3_read_bytes:sslv3 alert bad certificate) while SSL handshaking, client: 192.168.1.200, server: example.com
+
+192.168.1.117 - - [12/Aug/2025:09:55:45 +0000] "GET /logout HTTP/1.1" 302 0 "https://example.com/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+2025/08/12 09:58:45 [crit] 1237#0: *1501 SSL_write() failed (32: Broken pipe) while sending to client, client: 192.168.1.201, server: example.com, request: "GET /secure/data HTTP/1.1", host: "example.com"

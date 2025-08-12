@@ -10,16 +10,16 @@ permissions:
   contents: read
 
 env:
-  LOG_FILE_PATH: "logs/app.log"  # Change this path if your log file is in a different location
+  LOG_FILE_PATH: "logs/nginx-combined.log"  # Combined nginx access and error logs
   ANALYSIS_PROMPT: |
-    You are a log analysis expert. Analyze this application log file and provide a comprehensive report. 
+    You are a nginx web server expert. Analyze this combined nginx log file that contains both access logs and error logs. 
     Please identify and categorize any anomalies, security incidents, performance issues, and operational problems. 
     Structure your response with clear sections for: 
     1) Executive Summary, 
-    2) Security Incidents, 
-    3) System Performance Issues, 
-    4) Operational Problems, 
-    5) Log Format Anomalies, 
+    2) Security Incidents (attacks, unauthorized access, suspicious IPs), 
+    3) System Performance Issues (slow responses, upstream problems, resource issues), 
+    4) Operational Problems (errors, SSL issues, configuration problems), 
+    5) Traffic Patterns (bot activity, user behavior, rate limiting), 
     6) Recommendations. 
     Here is the log content:
 
@@ -83,7 +83,7 @@ jobs:
              -H "Authorization: Bearer $GITHUB_TOKEN" \
              -d @/tmp/final_request.json)
           
-          echo "=== 📊 COMPREHENSIVE LOG ANALYSIS REPORT ==="
+          echo "=== 📊 NGINX COMBINED LOG ANALYSIS REPORT ==="
           echo "Generated on: $(date)"
           echo "Log file: ${{ env.LOG_FILE_PATH }}"
           echo "Analysis powered by: GitHub Models (GPT-4o)"
@@ -107,7 +107,7 @@ jobs:
           echo "$ANALYSIS_OUTPUT"
           
           # Create GitHub Job Summary
-          echo "# 📊 Log Analysis Report" >> $GITHUB_STEP_SUMMARY
+          echo "# 🌐 Nginx Combined Log Analysis Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Generated:** $(date)" >> $GITHUB_STEP_SUMMARY
           echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
@@ -115,10 +115,14 @@ jobs:
           echo "**Analysis Model:** GitHub Models (GPT-4o)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📈 Log Statistics" >> $GITHUB_STEP_SUMMARY
-          echo "- **ERROR entries:** $(grep -c '\[ERROR\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **WARN entries:** $(grep -c '\[WARN\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **CRITICAL entries:** $(grep -c '\[CRITICAL\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **DEBUG entries:** $(grep -c '\[DEBUG\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total lines:** $(wc -l < ${{ env.LOG_FILE_PATH }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **File size:** $(du -h ${{ env.LOG_FILE_PATH }} | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Access log entries:** $(grep -c '^[0-9]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Error log entries:** $(grep -c '^\[0-9\|^2025/' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **4xx responses:** $(grep -c ' 4[0-9][0-9] ' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **5xx responses:** $(grep -c ' 5[0-9][0-9] ' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Error entries:** $(grep -c '\[error\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Warning entries:** $(grep -c '\[warn\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🔍 AI Analysis Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
