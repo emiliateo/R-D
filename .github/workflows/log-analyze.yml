@@ -115,10 +115,14 @@ jobs:
           echo "**Analysis Model:** GitHub Models (GPT-4o)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📈 Log Statistics" >> $GITHUB_STEP_SUMMARY
-          echo "- **ERROR entries:** $(grep -c '\[ERROR\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **WARN entries:** $(grep -c '\[WARN\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **CRITICAL entries:** $(grep -c '\[CRITICAL\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
-          echo "- **DEBUG entries:** $(grep -c '\[DEBUG\]' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total lines:** $(wc -l < ${{ env.LOG_FILE_PATH }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **File size:** $(du -h ${{ env.LOG_FILE_PATH }} | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **ERROR entries:** $(grep -i -c -E '\[error\]|\berror\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **WARN entries:** $(grep -i -c -E '\[warn\]|\bwarn\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **CRITICAL entries:** $(grep -i -c -E '\[crit\]|\[critical\]|\bcrit\b|\bcritical\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **INFO entries:** $(grep -i -c -E '\[info\]|\binfo\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **DEBUG entries:** $(grep -i -c -E '\[debug\]|\bdebug\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
+          echo "- **NOTICE entries:** $(grep -i -c -E '\[notice\]|\bnotice\b' ${{ env.LOG_FILE_PATH }} || echo '0')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🔍 AI Analysis Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
