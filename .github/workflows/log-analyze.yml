@@ -1,0 +1,81 @@
+name: Daily Log Anomaly Analysis
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' 
+
+permissions:
+  models: read
+  contents: read
+
+jobs:
+  analyze-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Analyze logs for anomalies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Use Python to properly handle log content and create JSON request
+          python3 -c "
+          import json
+          import string
+          import sys
+          
+          try:
+              # Read the log content and handle any encoding issues
+              with open('logs/app.log', 'r', encoding='utf-8', errors='replace') as f:
+                  log_content = f.read()
+              
+              # Clean the log content to remove any problematic control characters
+              # Keep only printable characters and common whitespace
+              printable_chars = string.printable
+              cleaned_content = ''.join(char if char in printable_chars else ' ' for char in log_content)
+              
+              # Create the API request
+              request_data = {
+                  'messages': [
+                      {
+                          'role': 'user',
+                          'content': 'In this log file, do you find some log anomalies? Please analyze the following log content and identify any unusual patterns, errors, or anomalies:\\n\\n' + cleaned_content
+                      }
+                  ],
+                  'model': 'openai/gpt-4o'
+              }
+              
+              # Write the properly formatted JSON request
+              with open('/tmp/final_request.json', 'w') as f:
+                  json.dump(request_data, f)
+              
+              print('API request prepared successfully')
+          
+          except Exception as e:
+              print(f'Error preparing request: {e}')
+              sys.exit(1)
+          "
+          
+          # Call AI model to analyze logs
+          RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+             -H "Content-Type: application/json" \
+             -H "Authorization: Bearer $GITHUB_TOKEN" \
+             -d @/tmp/final_request.json)
+          
+          echo "=== LOG ANOMALY ANALYSIS RESULTS ==="
+          echo "$RESPONSE" | python3 -c "
+          import sys, json
+          try:
+              data = json.load(sys.stdin)
+              if 'choices' in data and len(data['choices']) > 0:
+                  print(data['choices'][0]['message']['content'])
+              else:
+                  print('Error: Unexpected response format')
+                  print(json.dumps(data, indent=2))
+          except Exception as e:
+              print('Error processing response:', str(e))
+              sys.stdin.seek(0)
+              print('Raw response:', sys.stdin.read())
+          "
