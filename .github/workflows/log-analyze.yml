@@ -9,6 +9,20 @@ permissions:
   models: read
   contents: read
 
+env:
+  LOG_FILE_PATH: "logs/app.log"  # Change this path if your log file is in a different location
+  ANALYSIS_PROMPT: |
+    You are a log analysis expert. Analyze this application log file and provide a comprehensive report. 
+    Please identify and categorize any anomalies, security incidents, performance issues, and operational problems. 
+    Structure your response with clear sections for: 
+    1) Executive Summary, 
+    2) Security Incidents, 
+    3) System Performance Issues, 
+    4) Operational Problems, 
+    5) Log Format Anomalies, 
+    6) Recommendations. 
+    Here is the log content:
+
 jobs:
   analyze-logs:
     runs-on: ubuntu-latest
@@ -28,7 +42,7 @@ jobs:
           
           try:
               # Read the log content and handle any encoding issues
-              with open('logs/app.log', 'r', encoding='utf-8', errors='replace') as f:
+              with open('${{ env.LOG_FILE_PATH }}', 'r', encoding='utf-8', errors='replace') as f:
                   log_content = f.read()
               
               # Clean the log content to remove any problematic control characters
@@ -41,7 +55,7 @@ jobs:
                   'messages': [
                       {
                           'role': 'user',
-                          'content': 'You are a log analysis expert. Analyze this application log file and provide a comprehensive report. Please identify and categorize any anomalies, security incidents, performance issues, and operational problems. Structure your response with clear sections for: 1) Executive Summary, 2) Security Incidents, 3) System Performance Issues, 4) Operational Problems, 5) Log Format Anomalies, 6) Recommendations. Here is the log content:\\n\\n' + cleaned_content
+                          'content': '${{ env.ANALYSIS_PROMPT }}\\n\\n' + cleaned_content
                       }
                   ],
                   'model': 'openai/gpt-4o'
@@ -66,7 +80,7 @@ jobs:
           
           echo "=== 📊 COMPREHENSIVE LOG ANALYSIS REPORT ==="
           echo "Generated on: $(date)"
-          echo "Log file: logs/app.log"
+          echo "Log file: ${{ env.LOG_FILE_PATH }}"
           echo "Analysis powered by: GitHub Models (GPT-4o)"
           echo "=================================="
           echo ""
@@ -93,17 +107,17 @@ jobs:
           
           **Generated:** $(date)  
           **Repository:** ${{ github.repository }}  
-          **Log File:** `logs/app.log`  
+          **Log File:** `${{ env.LOG_FILE_PATH }}`  
           **Analysis Model:** GitHub Models (GPT-4o)
           
           ## 📈 Log Statistics
-          - **Total lines:** $(wc -l < logs/app.log)
-          - **File size:** $(du -h logs/app.log | cut -f1)
-          - **ERROR entries:** $(grep -c '\[ERROR\]' logs/app.log || echo '0')
-          - **WARN entries:** $(grep -c '\[WARN\]' logs/app.log || echo '0') 
-          - **CRITICAL entries:** $(grep -c '\[CRITICAL\]' logs/app.log || echo '0')
-          - **INFO entries:** $(grep -c '\[INFO\]' logs/app.log || echo '0')
-          - **DEBUG entries:** $(grep -c '\[DEBUG\]' logs/app.log || echo '0')
+          - **Total lines:** $(wc -l < ${{ env.LOG_FILE_PATH }})
+          - **File size:** $(du -h ${{ env.LOG_FILE_PATH }} | cut -f1)
+          - **ERROR entries:** $(grep -c '\[ERROR\]' ${{ env.LOG_FILE_PATH }} || echo '0')
+          - **WARN entries:** $(grep -c '\[WARN\]' ${{ env.LOG_FILE_PATH }} || echo '0') 
+          - **CRITICAL entries:** $(grep -c '\[CRITICAL\]' ${{ env.LOG_FILE_PATH }} || echo '0')
+          - **INFO entries:** $(grep -c '\[INFO\]' ${{ env.LOG_FILE_PATH }} || echo '0')
+          - **DEBUG entries:** $(grep -c '\[DEBUG\]' ${{ env.LOG_FILE_PATH }} || echo '0')
           
           ## 🔍 AI Analysis Results
           
