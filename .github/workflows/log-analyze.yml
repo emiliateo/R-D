@@ -12,19 +12,25 @@ permissions:
 env:
   LOG_FILE_PATH: "logs/nginx.log"  # Change this path if your log file is in a different location
   ANALYSIS_PROMPT: |
-    You are a log analyst. Analyze these logs and provide a SHORT, CLEAR report focusing on errors and problems.
+    You are a log analyst. Analyze these logs and provide a CLEAR report focusing on errors and problems with helpful details.
     
-    Keep your response CONCISE and use simple language. Focus only on:
-    - Critical errors and failures
-    - Security threats (attacks, suspicious activity)
-    - System problems that need fixing
+    For each issue found, include:
+    - What happened (error type)
+    - When it occurred (frequency/timing)
+    - Which IP/source if relevant
+    - Impact level (critical/high/medium)
     
-    Format your response in 3 SHORT sections:
-    1) **🚨 CRITICAL ISSUES** (most important problems - max 3 bullet points)
-    2) **⚠️ ERRORS FOUND** (list main error types - max 5 bullet points)  
-    3) **🔧 QUICK FIXES** (what to do next - max 3 action items)
+    Format your response in 3 sections:
+    1) **🚨 CRITICAL ISSUES** (urgent problems needing immediate action - max 4 items)
+       Include: error type, frequency, source IP/location, immediate impact
     
-    Use bullet points and keep each point to 1-2 sentences. Skip technical jargon. Here are the logs:
+    2) **⚠️ ERRORS FOUND** (system errors and problems - max 6 items)
+       Include: error category, how many times, affected services, root cause hints
+    
+    3) **🔧 RECOMMENDED ACTIONS** (prioritized fixes - max 4 items)
+       Include: what to do, why it's needed, expected outcome
+    
+    Use bullet points with 2-3 sentences per item. Include specific details like IP addresses, error codes, and frequencies. Here are the logs:
 
 jobs:
   analyze-logs:
